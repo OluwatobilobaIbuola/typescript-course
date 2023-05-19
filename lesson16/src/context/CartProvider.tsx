@@ -11,17 +11,15 @@ type CartStateType = { cart: CartItemType[] }
 
 const initCartState: CartStateType = { cart: [] }
 
-const REDUCER_ACTION_TYPE = {
-    ADD: "ADD",
-    REMOVE: "REMOVE",
-    QUANTITY: "QUANTITY",
-    SUBMIT: "SUBMIT",
+export const enum REDUCER_ACTION_TYPE {
+    ADD = "ADD",
+    REMOVE= "REMOVE",
+    QUANTITY= "QUANTITY",
+    SUBMIT= "SUBMIT",
 }
 
-export type ReducerActionType = typeof REDUCER_ACTION_TYPE
-
 export type ReducerAction = {
-    type: string,
+    type: REDUCER_ACTION_TYPE,
     payload?: CartItemType,
 }
 
@@ -83,10 +81,6 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
 const useCartContext = (initCartState: CartStateType) => {
     const [state, dispatch] = useReducer(reducer, initCartState)
 
-    const REDUCER_ACTIONS = useMemo(() => {
-        return REDUCER_ACTION_TYPE
-    }, [])
-
     const totalItems = state.cart.reduce((previousValue, cartItem) => {
         return previousValue + cartItem.qty
     }, 0)
@@ -103,14 +97,13 @@ const useCartContext = (initCartState: CartStateType) => {
         return itemA - itemB
     })
 
-    return { dispatch, REDUCER_ACTIONS, totalItems, totalPrice, cart }
+    return { dispatch, totalItems, totalPrice, cart }
 }
 
 export type UseCartContextType = ReturnType<typeof useCartContext>
 
 const initCartContextState: UseCartContextType = {
     dispatch: () => { },
-    REDUCER_ACTIONS: REDUCER_ACTION_TYPE,
     totalItems: 0,
     totalPrice: '',
     cart: [],
